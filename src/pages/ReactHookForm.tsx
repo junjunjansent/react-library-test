@@ -1,5 +1,28 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
+
+const signUpSchema = z
+  .object({
+    //everything we put here is required (so put optional if required)
+    username: z
+      .string()
+      .min(3, "Username must be at least 3 characters")
+      .max(20, "Username must be at most 20 characters"),
+    email: z.string().email(),
+    password: z.string().min(8, "Password must be at least 8 characters"),
+    confirmPassword: z.string(),
+    name: z.string().optional(),
+    gender: z.string().optional(),
+    age: z.number().optional(),
+    birthday: z.date().optional(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords must match",
+    path: ["confirmPassword"], //connect message to multiple inputs,
+  });
+
+type SignUpSchema = z.infer<typeof signUpSchema>;
 
 const GENDERS = ["F", "M", "X"];
 
@@ -7,10 +30,11 @@ interface Inputs {
   username: string;
   email: string;
   password: string;
-  name: string;
-  gender: (typeof GENDERS)[number];
-  age: number;
-  birthday: Date;
+  confirmPassword: string;
+  name?: string;
+  gender?: (typeof GENDERS)[number];
+  age?: number;
+  birthday?: Date;
 }
 
 const ReactHookFormPage = () => {
@@ -20,7 +44,8 @@ const ReactHookFormPage = () => {
     watch,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<Inputs>();
+    getValues,
+  } = useForm<SignUpSchema>({ resolver: zodResolver(signUpSchema) });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     console.log({ ...data, username: data.username.toLowerCase().trim() });
@@ -69,6 +94,15 @@ const ReactHookFormPage = () => {
                 value: 8,
                 message: "Password must be min 3 characters long",
               },
+            })}
+          />
+        </label>
+        <label>
+          <input
+            type="password"
+            defaultValue="Confirm Your Password"
+            {...register("confirmPassword", {
+              validate: (value) => value === getValues("password"),
             })}
           />
         </label>
