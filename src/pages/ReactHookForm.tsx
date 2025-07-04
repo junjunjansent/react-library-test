@@ -48,7 +48,9 @@ const ReactHookFormPage = () => {
   } = useForm<SignUpSchema>({ resolver: zodResolver(signUpSchema) });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
+    const cleanedData = signUpSchema.safeParse(data);
     console.log({ ...data, username: data.username.toLowerCase().trim() });
+    console.log(cleanedData);
     reset();
   };
 
@@ -56,6 +58,8 @@ const ReactHookFormPage = () => {
 
   return (
     <>
+      <h2> React Hook Form with Zod Schema Resolver</h2>
+
       {/* "handleSubmit" will validate your inputs before invoking "onSubmit"  */}
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* register your input into the hook by invoking the "register" function */}
@@ -84,6 +88,7 @@ const ReactHookFormPage = () => {
         </label>
         <label>
           <input type="email" defaultValue="email" {...register("email")} />
+          {errors.email && <p role="alert">{errors.email.message}</p>}
         </label>
         <label>
           <input
@@ -96,6 +101,7 @@ const ReactHookFormPage = () => {
               },
             })}
           />
+          {errors.password && <p role="alert">{errors.password.message}</p>}
         </label>
         <label>
           <input
@@ -105,26 +111,32 @@ const ReactHookFormPage = () => {
               validate: (value) => value === getValues("password"),
             })}
           />
+          {errors.confirmPassword && (
+            <p role="alert">{errors.confirmPassword.message}</p>
+          )}
         </label>
         <label>
           <input defaultValue="name" {...register("name")} />
+          {errors.name && <p role="alert">{errors.name.message}</p>}
         </label>
         <select defaultValue={""} {...register("gender")}>
           {GENDERS.map((gender) => (
-            <option value={gender}>{gender}</option>
+            <option key={gender} value={gender}>
+              {gender}
+            </option>
           ))}
         </select>
 
         <label>
-          <input type="number" defaultValue="age" {...register("age")} />
+          <input
+            type="number"
+            defaultValue={0}
+            {...(register("age"), { valueAsNumber: true })}
+          />
+          {errors.age && <p role="alert">{errors.age.message}</p>}
         </label>
-        {/* include validation with required or other standard HTML validation rules */}
-        {/* <input {...register("exampleRequired", { required: true })} /> */}
-        {/* errors will return when field validation fails  */}
-        {/* {errors.exampleRequired && <span>This field is required</span>} */}
         <input type="submit" disabled={isSubmitting} />
       </form>
-      <h6>Results</h6>
     </>
   );
 };
