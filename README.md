@@ -2,6 +2,12 @@
 
 Testing out React Libraries
 
+- [ ] Axios
+- [ ] TanstackQuery
+- [x] Jotai
+- [x] React Hook Form
+- [x] Zod
+
 ---
 
 # React + TypeScript + Vite
