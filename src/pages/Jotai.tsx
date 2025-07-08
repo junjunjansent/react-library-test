@@ -1,5 +1,5 @@
 import debug from "debug";
-const log = debug("react-test:");
+const log = debug("jotai:");
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { atom, useAtom } from "jotai";
