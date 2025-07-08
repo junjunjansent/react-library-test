@@ -2,7 +2,7 @@
 
 Testing out React Libraries
 
-- [ ] Axios
+- [x] Axios
 - [ ] TanstackQuery
 - [x] Jotai
 - [x] React Hook Form

@@ -66,6 +66,7 @@ const AxiosPage = () => {
 
     return () => controller.abort();
   }, []);
+
   return (
     <>
       <h1>AxiosPage</h1>
