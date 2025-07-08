@@ -1,3 +1,6 @@
+import debug from "debug";
+const log = debug("react-test:");
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
@@ -49,12 +52,12 @@ const ReactHookFormPage = () => {
 
   const onSubmit: SubmitHandler<Inputs> = (data) => {
     const cleanedData = signUpSchema.safeParse(data);
-    console.log({ ...data, username: data.username.toLowerCase().trim() });
-    console.log(cleanedData);
+    log({ ...data, username: data.username.toLowerCase().trim() });
+    log(cleanedData);
     reset();
   };
 
-  console.log(watch("username")); // watch input value by passing the name of it
+  log(watch("username")); // watch input value by passing the name of it
 
   return (
     <>
@@ -64,8 +67,8 @@ const ReactHookFormPage = () => {
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* register your input into the hook by invoking the "register" function */}
         <label>
+          Username
           <input
-            defaultValue="username"
             {...register("username", {
               required: "Username is required",
               minLength: {
@@ -87,13 +90,14 @@ const ReactHookFormPage = () => {
           {errors.username && <p role="alert">{errors.username.message}</p>}
         </label>
         <label>
-          <input type="email" defaultValue="email" {...register("email")} />
+          Email
+          <input type="email" {...register("email")} />
           {errors.email && <p role="alert">{errors.email.message}</p>}
         </label>
         <label>
+          Password
           <input
             type="password"
-            defaultValue="password"
             {...register("password", {
               minLength: {
                 value: 8,
@@ -104,9 +108,9 @@ const ReactHookFormPage = () => {
           {errors.password && <p role="alert">{errors.password.message}</p>}
         </label>
         <label>
+          Confirm Your Password
           <input
             type="password"
-            defaultValue="Confirm Your Password"
             {...register("confirmPassword", {
               validate: (value) => value === getValues("password"),
             })}
@@ -116,6 +120,7 @@ const ReactHookFormPage = () => {
           )}
         </label>
         <label>
+          Name
           <input defaultValue="name" {...register("name")} />
           {errors.name && <p role="alert">{errors.name.message}</p>}
         </label>
@@ -128,10 +133,11 @@ const ReactHookFormPage = () => {
         </select>
 
         <label>
+          Age
           <input
             type="number"
             defaultValue={0}
-            {...(register("age"), { valueAsNumber: true })}
+            {...register("age", { valueAsNumber: true })}
           />
           {errors.age && <p role="alert">{errors.age.message}</p>}
         </label>
