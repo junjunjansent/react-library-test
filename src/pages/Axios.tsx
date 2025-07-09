@@ -76,13 +76,9 @@ const AxiosPage = () => {
       <article>
         {recipes &&
           recipes.map((recipe: Recipe) => (
-            <>
+            <div key={recipe.recipeId}>
               <h1>{recipe.name}</h1>
-              <img
-                src={recipe.imageUrl}
-                alt={recipe.name}
-                style={{ width: "100%", borderRadius: "10px" }}
-              />
+              <img src={recipe.imageUrl} alt={recipe.name} />
               <p>{recipe.description}</p>
 
               <ul>
@@ -106,7 +102,7 @@ const AxiosPage = () => {
                   <li key={index}>{item}</li>
                 ))}
               </ul>
-            </>
+            </div>
           ))}
         {/* <pre>{JSON.stringify(recipes, null, 2)}</pre> */}
       </article>
